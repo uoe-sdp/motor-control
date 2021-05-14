@@ -6,7 +6,7 @@ import time
 import cv2
 import numpy as np
 
-import smbus
+import smbus2 as smbus
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 
@@ -128,7 +128,8 @@ class MotorControl:
 
     def __write_block(self, values):
         try:
-            self.bus.write_i2c_block_data(self.address, 0x00, values)
+            msg = smbus.i2c_msg.write(self.address, values)
+            self.bus.i2c_rdwr(msg)
         except IOError as e:
             print('I/O error({0}): {1}'.format(e.errno, e.strerror))
 
